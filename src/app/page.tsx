@@ -40,7 +40,7 @@ export default function Home() {
        const res = await getProducts()
        setData(res)
      }
-     fetchProducts()
+     fetchProducts().then(() => console.log('success')).catch((e) => console.log(e))
   }, []);
 
   return (
