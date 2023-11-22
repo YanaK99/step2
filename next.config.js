@@ -8,6 +8,9 @@ const nextConfig = { images: {
                 pathname: '/**',
             },
         ],
+    },
+    experimental: {
+        serverActions: true,
     },}
 
 module.exports = nextConfig
