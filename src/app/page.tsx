@@ -1,95 +1,72 @@
-import Image from 'next/image'
+'use client'
+import {useEffect, useMemo, useState} from "react";
+import Card from "@/components/Card/Card";
+import {IProduct} from "@/models/IProduct";
+import {getProducts} from "@/api/products-action";
 import styles from './page.module.css'
+import TextField from "@mui/material/TextField";
+import RadioGroup from "@mui/material/RadioGroup";
+import { FormControlLabel } from "@mui/material";
+import Radio from '@mui/material/Radio';
+import Button from '@mui/material/Button'
+
 
 export default function Home() {
+  const [data, setData] = useState<IProduct[]>([])
+  const [inputValue, setInputValue] = useState('')
+  const [currency, setCurrency] = useState('all')
+  const [rate, setRate] = useState('')
+
+  // const convertedData  = useMemo(() => {
+  //   return data.map((item) => ({...item, currency: }))
+  // }, [data, rate]);
+
+  const filteredDataByName = useMemo(() => {
+    return data.filter((item) => inputValue.length > 2 ? item.name.toLowerCase().includes(inputValue) : true)
+  }, [inputValue, data]);
+
+  const filteredData = useMemo(() => {
+        return filteredDataByName.filter((item) => currency === 'all' ? true : item.currency === currency)
+  }, [filteredDataByName, currency]);
+
+
+
+  const changeCurrency = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrency((event.target as HTMLInputElement).value);
+  };
+
+  useEffect(() => {
+     const fetchProducts = async  () => {
+       const res = await getProducts()
+       setData(res)
+     }
+     fetchProducts()
+  }, []);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      <div className={styles.container}>
+          <TextField id="outlined-basic" label="Name" variant="outlined" value={inputValue}  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setInputValue(event.target.value);
+          }}/>
+          <RadioGroup
+              defaultValue="all"
+              name="radio-buttons-group"
+              value={currency}
+              onChange={changeCurrency}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+              <FormControlLabel value="all" control={<Radio />} label="all" />
+              <FormControlLabel value="UAH" control={<Radio />} label="UAH" />
+              <FormControlLabel value="USD" control={<Radio />} label="USD" />
+          </RadioGroup>
+          <TextField type='number' id="outlined-basic" label="Rate" variant="outlined" value={rate}  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setRate(event.target.value);
+          }}/>
+          <Button className={styles.button} variant="contained">Reset</Button>
+          <Button className={styles.button} variant="contained">convert to UAH</Button>
+          <Button className={styles.button} variant="contained">convert to USD</Button>
+           <div className={styles.products}>
+               {filteredData.length ? filteredData.map((item) => <Card {...item} key={item.productCode}/>): 'No Products'}
+           </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
   )
 }
