@@ -15,7 +15,7 @@ export default function Home() {
   const [data, setData] = useState<IProduct[]>([])
   const [inputValue, setInputValue] = useState('')
   const [currency, setCurrency] = useState('all')
-  const [rate, setRate] = useState('')
+  // const [rate, setRate] = useState('')
 
   // const convertedData  = useMemo(() => {
   //   return data.map((item) => ({...item, currency: }))
@@ -58,12 +58,12 @@ export default function Home() {
               <FormControlLabel value="UAH" control={<Radio />} label="UAH" />
               <FormControlLabel value="USD" control={<Radio />} label="USD" />
           </RadioGroup>
-          <TextField type='number' id="outlined-basic" label="Rate" variant="outlined" value={rate}  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setRate(event.target.value);
-          }}/>
-          <Button className={styles.button} variant="contained">Reset</Button>
-          <Button className={styles.button} variant="contained">convert to UAH</Button>
-          <Button className={styles.button} variant="contained">convert to USD</Button>
+          {/*<TextField type='number' id="outlined-basic" label="Rate" variant="outlined" value={rate}  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {*/}
+          {/*    setRate(event.target.value);*/}
+          {/*}}/>*/}
+          {/*<Button className={styles.button} variant="contained">Reset</Button>*/}
+          {/*<Button className={styles.button} variant="contained">convert to UAH</Button>*/}
+          {/*<Button className={styles.button} variant="contained">convert to USD</Button>*/}
            <div className={styles.products}>
                {filteredData.length ? filteredData.map((item) => <Card {...item} key={item.productCode}/>): 'No Products'}
            </div>
