@@ -2,7 +2,7 @@
 import {useEffect, useMemo, useState} from "react";
 import Card from "@/components/Card/Card";
 import {IProduct} from "@/models/IProduct";
-import {getProducts} from "@/api/products-action";
+import {getProducts} from "@/app/api/products-action";
 import styles from './page.module.css'
 import TextField from "@mui/material/TextField";
 import RadioGroup from "@mui/material/RadioGroup";
