@@ -4,13 +4,18 @@ import Image from 'next/image';
 import styles from './card.module.css'
 
 const Card = ({ productCode, name, qty, image, price, currency } : IProduct) => {
-    const SIZE_IMAGE = 300
+
+  const imageSizeRegex = /(\d+)x(\d+)/;
+
+  const match = image.match(imageSizeRegex);
+  const width = match ? parseInt(match[1], 10) : 300;
+  const height = match ? parseInt(match[2], 10) : 300;
     return (
-        <div className={styles.card}>
-            <Image src={image} alt={name} width={SIZE_IMAGE} height={SIZE_IMAGE}/>
+        <div className={styles.card} style={{ width: `${width}px` }}>
+            <Image src={image} alt={name} width={width} height={height}/>
             <div>
-                <h2>{name}</h2>
-                <h3>code : {productCode}</h3>
+                <h3>{name}</h3>
+                <h4>code : {productCode}</h4>
                 <div>quantity : {qty}</div>
                 <div>{price} {currency}</div>
             </div>
